@@ -1,0 +1,92 @@
+title: CodeReviewGPT
+summary: TODO
+description: TODO
+
+website: https://github.com/ofalvai/bitrise-step-code-review-gpt
+source_code_url: https://github.com/ofalvai/bitrise-step-code-review-gpt
+support_url: https://github.com/ofalvai/bitrise-step-code-review-gpt
+
+project_type_tags:
+- ios
+- cordova
+- ionic
+- react-native
+- flutter
+type_tags:
+- utility
+
+is_always_run: true
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/codereview-gpt
+
+inputs:
+- github_token:
+  opts:
+    title: GitHub API token
+    is_required: true
+    is_sensitive: true
+- pr_id: $BITRISE_PULL_REQUEST
+  opts:
+    title: PR ID
+- repo_owner: $BITRISEIO_GIT_REPOSITORY_OWNER
+  opts:
+    title: GitHub repo owner
+- repo_name: $BITRISEIO_GIT_REPOSITORY_SLUG
+  opts:
+    title: GitHub repo name
+- pr_title:
+  opts:
+    title: PR title
+    summary: Title of Pull Request
+- pr_description:
+  opts:
+    title: PR description
+    summary: Description of Pull Request
+- repo_description:
+  opts:
+    title: Repository description
+    summary: Description of the repository related to the PR. Use this field to give more context about the PR
+- system_prompt: |-
+    You are an assistant helping pull request authors improve the changeset by asking questions from the PR author.
+    Your questions may include potential edge-cases, side-effects to consider, or testing strategies, but you are encouraged to ask about other concerns if they are relevant to the PR.
+    Your questions are creative and open-ended. Be polite, but use simple language and short sentences. Your response is a numbered list of comments.
+  opts:
+    title: System prompt
+    summary: Initial prompt for the language model
+    is_required: true
+- pr_detail_template: |-
+    About this repo: {{ .RepoDescription }}
+    Main language of this repo: {{ .RepoMainLanguage }}
+
+    PR title: {{ .PRTitle }}
+
+    PR description:
+    {{ .PRDescription }}
+  opts:
+    title: PR details
+    summary: Information about the Pull Request
+    is_required: true
+- openai_api_key:
+  opts:
+    title: OpenAI API key
+    summary: OpenAI API key to use for requests
+    is_required: true
+    is_sensitive: true
+- openai_model: gpt-4
+  opts:
+    title: Model
+    summary: OpenAI model to use
+    is_required: true
+    value_options:
+    - gpt-4
+    - gpt-3.5-turbo
+- verbose: "false"
+  opts:
+    title: Verbose logging
+    summary: Enable logging additional information for troubleshooting
+    is_required: true
+    value_options:
+    - "true"
+    - "false"

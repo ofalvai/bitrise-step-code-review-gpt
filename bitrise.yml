@@ -1,0 +1,59 @@
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  check:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-check.git: { }
+
+  e2e:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-check.git:
+        inputs:
+        - workflow: e2e
+
+  example:
+    steps:
+    - path::./:
+        inputs:
+        - openai_api_key: $OPENAI_API_KEY
+        - openai_model: gpt-3.5-turbo
+        - verbose: "true"
+        - pr_title: Don't warm up the default Flutter version cache
+        - pr_description: |-
+            ### Context
+            Running flutter precache creates 2GB of cache for the selected Flutter version:
+
+              ```
+            --- /Users/vagrant/fvm/versions/2.10.3/bin ------------------------------------------------------------------------------------------------------------------------------------------------------------
+              /..
+              2.0 GiB [############################] /cache
+              96.0 KiB [                            ] /internal
+              4.0 KiB [                            ]  flutter.bat
+              4.0 KiB [                            ]  flutter
+              4.0 KiB [                            ]  dart
+              4.0 KiB [                            ]  dart.bat
+              Since there is a high chance that the globally selected Flutter version is not right for most projects (that's why we have the Flutter Install step), this 2GB of cache is wasted space in cases.
+              ```
+
+            ### Changes
+            - Remove precache task
+            - Remove flutter doctor task too as it's not fixing anything, it just displays information according to the docs.
+        - repo_description: VM image build utilities, such as Ansible playbooks and roles.
+  example_api:
+    steps:
+    - path::./:
+        inputs:
+        - openai_api_key: $OPENAI_API_KEY
+        - openai_model: gpt-3.5-turbo
+        - verbose: "true"
+        - github_token: $GITHUB_TOKEN
+        - pr_id: 37
+        - repo_owner: ofalvai
+        - repo_name: HabitBuilder
+
+  generate_readme:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-readme-generator.git@main:
+        inputs:
+        - example_section: docs/examples.md
