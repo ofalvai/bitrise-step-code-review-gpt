@@ -39,3 +39,17 @@ func (c GitHubClient) PullRequest(id int) (*github.PullRequest, error) {
 
 	return pr, nil
 }
+
+func (c GitHubClient) PostComment(comment string) (*github.IssueComment, error) {
+	// TODO: use GetFirstCommentWithTag() and UpdateComment() instead of CreateComment()
+	// https://github.com/kvvzr/bitrise-step-comment-on-github-pull-request/blob/master/main.go#L29
+	ctx := context.Background()
+	issueComment, _, err := c.client.Issues.CreateComment(ctx, c.owner, c.repo, c.prID, &github.IssueComment{
+		Body: &comment,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return issueComment, nil
+}

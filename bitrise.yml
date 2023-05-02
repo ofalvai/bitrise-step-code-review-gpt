@@ -45,12 +45,12 @@ workflows:
     - path::./:
         inputs:
         - openai_api_key: $OPENAI_API_KEY
-        - openai_model: gpt-3.5-turbo
+        - openai_model: gpt-4
         - verbose: "true"
         - github_token: $GITHUB_TOKEN
-        - pr_id: 37
-        - repo_owner: ofalvai
-        - repo_name: HabitBuilder
+        - pr_id: 80
+        - repo_owner: bitrise-io
+        - repo_name: go-steputils
 
   generate_readme:
     steps:

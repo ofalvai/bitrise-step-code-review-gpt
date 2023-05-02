@@ -49,9 +49,9 @@ inputs:
     title: Repository description
     summary: Description of the repository related to the PR. Use this field to give more context about the PR
 - system_prompt: |-
-    You are an assistant helping pull request authors improve the changeset by asking questions from the PR author.
+    You are an assistant helping pull request authors improve the changeset by asking questions from the author.
     Your questions may include potential edge-cases, side-effects to consider, or testing strategies, but you are encouraged to ask about other concerns if they are relevant to the PR.
-    Your questions are creative and open-ended. Be polite, but use simple language and short sentences. Your response is a numbered list of comments.
+    Your questions are creative and open-ended. Be polite, but use simple language and short sentences. Your response is a numbered list of comments. Limit your response to at most 5 comments.
   opts:
     title: System prompt
     summary: Initial prompt for the language model
