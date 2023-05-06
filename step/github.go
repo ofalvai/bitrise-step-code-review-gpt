@@ -2,6 +2,8 @@ package step
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/google/go-github/v52/github"
 	"golang.org/x/oauth2"
@@ -40,16 +42,41 @@ func (c GitHubClient) PullRequest(id int) (*github.PullRequest, error) {
 	return pr, nil
 }
 
-func (c GitHubClient) PostComment(comment string) (*github.IssueComment, error) {
-	// TODO: use GetFirstCommentWithTag() and UpdateComment() instead of CreateComment()
-	// https://github.com/kvvzr/bitrise-step-comment-on-github-pull-request/blob/master/main.go#L29
+func (c GitHubClient) UpsertComment(comment string) (*github.IssueComment, error) {
 	ctx := context.Background()
+	commentTag := "<!-- codereview-gpt -->"
+
+	taggedComment, err := c.GetFirstCommentWithTag(commentTag)
+	if err != nil {
+		return nil, err
+	}
+	if taggedComment != nil {
+		issueComment, _, err := c.client.Issues.EditComment(ctx, c.owner, c.repo, *taggedComment.ID, &github.IssueComment{
+			Body: &comment,
+		})
+		return issueComment, err
+	}
+
+	taggedBody := fmt.Sprintf("%s\n%s", commentTag, comment)
 	issueComment, _, err := c.client.Issues.CreateComment(ctx, c.owner, c.repo, c.prID, &github.IssueComment{
-		Body: &comment,
+		Body: &taggedBody,
 	})
+
+	return issueComment, err
+}
+
+func (c GitHubClient) GetFirstCommentWithTag(tag string) (*github.IssueComment, error) {
+	ctx := context.Background()
+	issueComments, _, err := c.client.Issues.ListComments(ctx, c.owner, c.repo, c.prID, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return issueComment, nil
+	for _, issueComment := range issueComments {
+		if strings.Contains(*issueComment.Body, tag) {
+			return issueComment, nil
+		}
+	}
+
+	return nil, nil
 }

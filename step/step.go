@@ -99,7 +99,7 @@ func (step CodeReviewStep) Run() error {
 	if err != nil {
 		return fmt.Errorf("failed to render PR comment: %w", err)
 	}
-	comment, err := ghClient.PostComment(commentBody)
+	comment, err := ghClient.UpsertComment(commentBody)
 	if err != nil {
 		return fmt.Errorf("failed to post comment: %w", err)
 	}
