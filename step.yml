@@ -16,6 +16,7 @@ type_tags:
 - utility
 
 is_always_run: true
+is_skippable: true
 
 toolkit:
   go:
