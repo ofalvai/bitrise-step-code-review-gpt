@@ -69,9 +69,15 @@ func (step CodeReviewStep) Run() error {
 	if err != nil {
 		return fmt.Errorf("failed to get PR data: %w", err)
 	}
-	step.logger.Printf("PR title: %s", prData.GetTitle())
+
 	step.logger.Printf("Repo description: %s", prData.GetBase().GetRepo().GetDescription())
 	step.logger.Printf("Repo main language: %s", prData.GetBase().GetRepo().GetLanguage())
+	step.logger.Printf("PR title: %s", prData.GetTitle())
+	if len(prData.GetBody()) > 100 {
+		step.logger.Printf("PR description: %s...", prData.GetBody()[:100])
+	} else {
+		step.logger.Printf("PR description: %s", prData.GetBody())
+	}
 	step.logger.Donef("Done.")
 
 	templateInventory := PRPromptInventory{
