@@ -51,8 +51,9 @@ func (c GitHubClient) UpsertComment(comment string) (*github.IssueComment, error
 		return nil, err
 	}
 	if taggedComment != nil {
+		updatedBody := fmt.Sprintf("%s\n%s", commentTag, comment)
 		issueComment, _, err := c.client.Issues.EditComment(ctx, c.owner, c.repo, *taggedComment.ID, &github.IssueComment{
-			Body: &comment,
+			Body: &updatedBody,
 		})
 		return issueComment, err
 	}
