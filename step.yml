@@ -1,6 +1,15 @@
 title: CodeReviewGPT
-summary: TODO
-description: TODO
+summary: Let a language model give early feedback on your PRs automatically.
+description: |
+  Let a language model give early feedback on your PRs automatically.
+
+  This step uses the GitHub and OpenAI APIs to review a PR and post a comment with reminders and thought-provoking questions the PR author might have missed.
+  
+  The comments are generated based on the PR title, description, and a system prompt. The step **does not** access code, only PR metadata (makes you write better PR descriptions 😜).
+
+  Limitations:
+  - bring your own OpenAI API key
+  - GitHub only
 
 website: https://github.com/ofalvai/bitrise-step-code-review-gpt
 source_code_url: https://github.com/ofalvai/bitrise-step-code-review-gpt
@@ -26,17 +35,21 @@ inputs:
 - github_token:
   opts:
     title: GitHub API token
+    summary: GitHub API token with **write** access to the repository
     is_required: true
     is_sensitive: true
 - pr_id: $BITRISE_PULL_REQUEST
   opts:
     title: PR ID
+    summary: The ID of the Pull Request to review 
 - repo_owner: $BITRISEIO_GIT_REPOSITORY_OWNER
   opts:
     title: GitHub repo owner
+    summary: The owner of the repository to review. Used for fetching PR metadata and posting the comment.
 - repo_name: $BITRISEIO_GIT_REPOSITORY_SLUG
   opts:
     title: GitHub repo name
+    summary: The name of the repository to review. Used for fetching PR metadata and posting the comment.
 - pr_title:
   opts:
     title: PR title
