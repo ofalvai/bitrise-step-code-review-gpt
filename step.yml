@@ -75,15 +75,16 @@ inputs:
     summary: OpenAI API key to use for requests
     is_required: true
     is_sensitive: true
-- openai_model: gpt-4-1106-preview
+- openai_model: gpt-4o
   opts:
     title: Model
     summary: OpenAI model to use
     is_required: true
     value_options:
+    - gpt-4o
+    - gpt-4-turbo
     - gpt-4
     - gpt-3.5-turbo
-    - gpt-4-1106-preview
 - verbose: "false"
   opts:
     title: Verbose logging
